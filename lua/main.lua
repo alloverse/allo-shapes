@@ -33,9 +33,12 @@ mainView.grabbable = true
 local titleLabel = mainView:addSubview(
   ui.Label{ bounds= ui.Bounds{size=ui.Size(1.5,0.10,0.01)}
     :move( mainView.bounds.size:getEdge("top", "center", "back") )
-    :move( 0, 0.06, 0)
+    :move( 0, 0.06, 0),
+    text="Shape Manipulator",
+    halign="center"
   }
 )
+
 
 -- Create a regular ol' button. Make it 2 dm wide and high, and 1dm deep.
 -- The position refers to the center of the button, so it needs to be moved
@@ -49,7 +52,7 @@ mainView:addSubview(button)
 button.onActivated = function()
     print("Creating a Cube...")
 
-    local cube = ResizeableCube(ui.Bounds(0, 0, -2, 1, 1, 1))
+    local cube = ResizeableCube(ui.Bounds(0, 0, -2, 1, 2, 0.3))
     cube:setColor({0.8, 0.8, 0.8, 0.5})
     mainView:addSubview(cube)
 end

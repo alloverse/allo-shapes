@@ -6,6 +6,7 @@ local tablex = require('pl.tablex')
 local pretty = require('pl.pretty')
 local vec3 = require("modules.vec3")
 local mat4 = require("modules.mat4")
+local CubeSurface = require("cube_surface")
 
 class.ResizeableCube(ui.View)
 
@@ -29,51 +30,24 @@ function ResizeableCube:_init(bounds)
       print("Cube is at ", self.bounds.pose)
     end
 
-    self.frontSide = ui.Surface(bounds:copy():move(0,0, self.bounds.size.depth/2))
-    self.frontSide:setColor({1, 1, 1, 0.3})
-    self.frontSide:setPointable(true)
-    self.frontSide.onTouchDown = function()
-      print("Front surface is at ", self.frontSide.bounds.pose)
-    end
-    self.frontSide.onPointerEntered = function()
-      self.frontSide:setColor({1, 0, 0, 0.3})
-    end
-    self.frontSide.onPointerExited = function()
-      self.frontSide:setColor({1, 1, 1, 0.3})
-    end
+
+    self.frontSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.height, 0.001):move(0, 0, self.bounds.size.depth/2))
     self:addSubview(self.frontSide)
 
-    self.backSide = ui.Surface(bounds:copy():move(0,0, -self.bounds.size.depth/2))
-    self.backSide:setColor({1, 1, 1, 0.3})
-    self.backSide:setPointable(true)
-    self.backSide.onTouchDown = function()
-      print("Back surface is at ", self.backSide.bounds.pose)
-    end
-    self.backSide.onPointerEntered = function()
-      self.backSide:setColor({1, 0, 0, 0.3})
-    end
-    self.backSide.onPointerExited = function()
-      self.backSide:setColor({1, 1, 1, 0.3})
-    end
+    self.backSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.height, 0.001):move(0, 0, -self.bounds.size.depth/2))
     self:addSubview(self.backSide)
 
-
-    self.topSide = ui.Surface(bounds:copy():rotate(self.PI/2, 1, 0, 0):move(0, self.bounds.size.height/2, 0))
-    self.topSide:setColor({1, 1, 1, 0.3})
-    self.topSide:setPointable(true)
-    self.topSide.onTouchDown = function()
-      print("Top surface is at ", self.topSide.bounds.pose)
-    end
-    self.topSide.onPointerEntered = function()
-      self.topSide:setColor({1, 0, 0, 0.3})
-    end
-    self.topSide.onPointerExited = function()
-      self.topSide:setColor({1, 1, 1, 0.3})
-    end
+    self.topSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.depth, 0.001):rotate(self.PI/2, 1, 0, 0):move(0, self.bounds.size.height/2, 0))
     self:addSubview(self.topSide)
 
+    self.bottomSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.depth, 0.001):rotate(self.PI/2, 1, 0, 0):move(0, -self.bounds.size.height/2, 0))
+    self:addSubview(self.bottomSide)
 
+    self.leftSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.depth, self.bounds.size.height, 0.001):rotate(self.PI/2, 0, 1, 0):move(-self.bounds.size.width/2, 0, 0))
+    self:addSubview(self.leftSide)
 
+    self.rightSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.depth, self.bounds.size.height, 0.001):rotate(self.PI/2, 0, 1, 0):move(self.bounds.size.width/2, 0, 0))
+    self:addSubview(self.rightSide)
 
 end
 

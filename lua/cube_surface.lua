@@ -21,6 +21,7 @@ function CubeSurface:_init(bounds)
     self:super(bounds)
     self.color = {1.0, 1.0, 1.0, 0.3}
     self:setPointable(true)
+    self:setGrabbable(true)
     self.hasTransparency = true
 end
 
@@ -47,22 +48,36 @@ function CubeSurface:specification()
         material = {
             color = self.color
         },
+        grabbable = {
+          actuate_on = "$parent"
+        }
     })
 
     return mySpec
 end
 
-
-function CubeSurface:onPointerEntered()
-  self.color = {0.0, 1.0, 0.0, 0.3}
+--- Sets the CubeSurface's color
+-- @tparam table rgba The r, g, b and a values of the text color, each defined between 0 and 1. For example, {1, 0.5, 0, 1}
+function CubeSurface:setColor(rgba)
+  self.color = rgba
+  if self:isAwake() then
+    local mat = self:specification().material
+    self:updateComponents({
+        material= mat
+    })
+  end
 end
 
-function CubeSurface:onPointerExited()
-  self.color = {1.0, 1.0, 1.0, 0.3}
+function CubeSurface:onPointerEntered(pointer)
+  self:setColor({0.0, 1.0, 0.0, 0.3})
+end
+
+function CubeSurface:onPointerExited(pointer)
+  self:setColor({1.0, 1.0, 1.0, 0.3})
 end
 
 function CubeSurface:onTouchDown(pointer)
-  print("CubeSurface touch down!")
+  print("Surface touchDown! Pose: ", self.bounds.pose)
 end
 
 return CubeSurface
