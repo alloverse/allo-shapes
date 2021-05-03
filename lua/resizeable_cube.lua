@@ -30,23 +30,40 @@ function ResizeableCube:_init(bounds)
       print("Cube is at ", self.bounds.pose)
     end
 
-
     self.frontSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.height, 0.001):move(0, 0, self.bounds.size.depth/2))
+    self.frontSide.onTouchDown = function(pointer) 
+      self:resizeZ(0.1)
+    end
     self:addSubview(self.frontSide)
 
     self.backSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.height, 0.001):move(0, 0, -self.bounds.size.depth/2))
+    self.backSide.onTouchDown = function(pointer) 
+      self:resizeZ(-0.1)
+    end
     self:addSubview(self.backSide)
 
     self.topSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.depth, 0.001):rotate(self.PI/2, 1, 0, 0):move(0, self.bounds.size.height/2, 0))
+    self.topSide.onTouchDown = function(pointer) 
+      self:resizeY(0.1)
+    end
     self:addSubview(self.topSide)
 
     self.bottomSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.depth, 0.001):rotate(self.PI/2, 1, 0, 0):move(0, -self.bounds.size.height/2, 0))
+    self.bottomSide.onTouchDown = function(pointer) 
+      self:resizeY(-0.1)
+    end
     self:addSubview(self.bottomSide)
 
     self.leftSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.depth, self.bounds.size.height, 0.001):rotate(self.PI/2, 0, 1, 0):move(-self.bounds.size.width/2, 0, 0))
+    self.leftSide.onTouchDown = function(pointer) 
+      self:resizeX(-0.1)
+    end
     self:addSubview(self.leftSide)
 
     self.rightSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.depth, self.bounds.size.height, 0.001):rotate(self.PI/2, 0, 1, 0):move(self.bounds.size.width/2, 0, 0))
+    self.rightSide.onTouchDown = function(pointer) 
+      self:resizeX(0.1)
+    end
     self:addSubview(self.rightSide)
 
 end
@@ -91,11 +108,6 @@ function ResizeableCube:setColor(rgba)
     end
 end
 
-function ResizeableCube:onTouchDown(pointer)
-  print("on touch down!")
-  self:resizeX(2)
-end
-
 
 function ResizeableCube:resizeX(delta)
   self.bounds.size.width = self.bounds.size.width + delta
@@ -103,5 +115,20 @@ function ResizeableCube:resizeX(delta)
     self:specification()
   )
 end
+
+function ResizeableCube:resizeY(delta)
+  self.bounds.size.height = self.bounds.size.height + delta
+  self:updateComponents(
+    self:specification()
+  )
+end
+
+function ResizeableCube:resizeZ(delta)
+  self.bounds.size.depth = self.bounds.size.depth + delta
+  self:updateComponents(
+    self:specification()
+  )
+end
+
 
 return ResizeableCube
