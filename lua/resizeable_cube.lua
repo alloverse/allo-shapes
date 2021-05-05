@@ -26,43 +26,40 @@ function ResizeableCube:_init(bounds)
     self:setPointable(true)
     self:setGrabbable(true)
     self.hasTransparency = true
-    self.onTouchDown = function()
-      print("Cube is at ", self.bounds.pose)
-    end
 
     self.frontSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.height, 0.001):move(0, 0, self.bounds.size.depth/2))
-    self.frontSide.onTouchDown = function(pointer) 
-      self:resizeZ(0.1)
+    self.frontSide.onTouchUp = function(object, pointer)
+      self:resizeZ(0.2)
     end
     self:addSubview(self.frontSide)
 
     self.backSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.height, 0.001):move(0, 0, -self.bounds.size.depth/2))
-    self.backSide.onTouchDown = function(pointer) 
-      self:resizeZ(-0.1)
+    self.backSide.onTouchUp = function(object, pointer) 
+      self:resizeZ(-0.2)
     end
     self:addSubview(self.backSide)
 
     self.topSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.depth, 0.001):rotate(self.PI/2, 1, 0, 0):move(0, self.bounds.size.height/2, 0))
-    self.topSide.onTouchDown = function(pointer) 
-      self:resizeY(0.1)
+    self.topSide.onTouchUp = function(object, pointer) 
+      self:resizeY(0.2)
     end
     self:addSubview(self.topSide)
 
     self.bottomSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.width, self.bounds.size.depth, 0.001):rotate(self.PI/2, 1, 0, 0):move(0, -self.bounds.size.height/2, 0))
-    self.bottomSide.onTouchDown = function(pointer) 
-      self:resizeY(-0.1)
+    self.bottomSide.onTouchUp = function(object, pointer) 
+      self:resizeY(-0.2)
     end
     self:addSubview(self.bottomSide)
 
     self.leftSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.depth, self.bounds.size.height, 0.001):rotate(self.PI/2, 0, 1, 0):move(-self.bounds.size.width/2, 0, 0))
-    self.leftSide.onTouchDown = function(pointer) 
-      self:resizeX(-0.1)
+    self.leftSide.onTouchUp = function(object, pointer) 
+      self:resizeX(-0.2)
     end
     self:addSubview(self.leftSide)
 
     self.rightSide = CubeSurface(Bounds(0, 0, 0, self.bounds.size.depth, self.bounds.size.height, 0.001):rotate(self.PI/2, 0, 1, 0):move(self.bounds.size.width/2, 0, 0))
-    self.rightSide.onTouchDown = function(pointer) 
-      self:resizeX(0.1)
+    self.rightSide.onTouchUp = function(object, pointer) 
+      self:resizeX(0.2)
     end
     self:addSubview(self.rightSide)
 
@@ -114,6 +111,8 @@ function ResizeableCube:resizeX(delta)
   self:updateComponents(
     self:specification()
   )
+
+  self:layout()
 end
 
 function ResizeableCube:resizeY(delta)
@@ -121,6 +120,8 @@ function ResizeableCube:resizeY(delta)
   self:updateComponents(
     self:specification()
   )
+
+  self:layout()
 end
 
 function ResizeableCube:resizeZ(delta)
@@ -128,7 +129,45 @@ function ResizeableCube:resizeZ(delta)
   self:updateComponents(
     self:specification()
   )
+
+  self:layout()
+
 end
 
+function ResizeableCube:layout()
+
+  self.rightSide:setBounds(
+    ui.Bounds{size= ui.Size(self.bounds.size.depth, self.bounds.size.height, 0.001)}:rotate(self.PI/2, 0, 1, 0):move(self.bounds.size.width/2, 0, 0)
+  )
+
+  self.leftSide:setBounds(
+    ui.Bounds{size= ui.Size(self.bounds.size.depth, self.bounds.size.height, 0.001)}:rotate(self.PI/2, 0, 1, 0):move(-self.bounds.size.width/2, 0, 0)
+  )
+
+  self.frontSide:setBounds(
+    ui.Bounds{size= ui.Size(self.bounds.size.width, self.bounds.size.height, 0.001)}:move(0, 0, self.bounds.size.depth/2)
+  )
+
+  self.backSide:setBounds(
+    ui.Bounds{size= ui.Size(self.bounds.size.width, self.bounds.size.height, 0.001)}:move(0, 0, -self.bounds.size.depth/2)
+  )
+  
+  self.topSide:setBounds(
+    ui.Bounds{size= ui.Size(self.bounds.size.width, self.bounds.size.depth, 0.001)}:rotate(self.PI/2, 1, 0, 0):move(0, self.bounds.size.height/2, 0)
+  )
+
+  self.bottomSide:setBounds(
+    ui.Bounds{size= ui.Size(self.bounds.size.width, self.bounds.size.depth, 0.001)}:rotate(self.PI/2, 1, 0, 0):move(0, -self.bounds.size.height/2, 0)
+  )
+
+
+  self.rightSide:updateComponents(self.rightSide:specification())
+  self.leftSide:updateComponents(self.leftSide:specification())
+  self.frontSide:updateComponents( self.frontSide:specification())
+  self.backSide:updateComponents(self.backSide:specification())
+  self.topSide:updateComponents( self.topSide:specification())
+  self.bottomSide:updateComponents(self.bottomSide:specification())
+
+end
 
 return ResizeableCube

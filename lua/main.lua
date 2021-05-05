@@ -35,12 +35,11 @@ addCubeButton.onActivated = function()
 
     print("Creating a Cube...")
 
-    local cube = ResizeableCube(ui.Bounds(0, 0, -2, 1, 1.5, 0.5))
+    local cube = ResizeableCube(ui.Bounds(0, 0, -2, 0.5, 0.5, 1.0))
     cube:setColor({0.8, 0.8, 0.8, 0.5})
     mainView:addSubview(cube)
 
     --TODO: Create a list item reference to the created shape. Probably temporary 
-
 end
 
 

@@ -76,8 +76,19 @@ function CubeSurface:onPointerExited(pointer)
   self:setColor({1.0, 1.0, 1.0, 0.3})
 end
 
-function CubeSurface:onTouchDown(pointer)
-  print("Surface touchDown! Pose: ", self.bounds.pose)
+-- function CubeSurface:onTouchDown(pointer)
+--   print("Surface touchDown! Pose: ", self.bounds.pose)
+-- end
+
+function CubeSurface:onTouchUp(pointer)
+  
+  print("point" + pointer.pointedTo)
+
+  -- local m = mat4.new(self.resizeHandle.entity.components.transform.matrix) -- looks at the resizeHandle's position
+  -- local resizeHandlePosition = m * vec3(0,0,0)
+
+  
+
 end
 
 return CubeSurface
